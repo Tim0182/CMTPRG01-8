@@ -1,8 +1,11 @@
-class TowerButton extends Button {
+class TowerButton extends Button implements Subject {
     
     private progress:number = 0;
     private bar:HTMLElement;
     private game:Game;
+    
+    public observers : Array<Observer> = new Array<Observer>();
+
     constructor(game) {
         super("towerbutton");
         this.game = game;
@@ -23,7 +26,17 @@ class TowerButton extends Button {
         }
     }
 
+    public subscribe(o:Observer) {
+        this.observers.push(o);
+    }
+
+    public unsubscribe(o:Observer):void {
+        //
+    }
+
     private upgrade() {
-        
+        for (let o of this.observers) {
+            o.notify();
+        }
     }
 }

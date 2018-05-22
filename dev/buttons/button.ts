@@ -1,4 +1,4 @@
-class Button{
+class Button {
 
     private pause : boolean = false;
     protected div : HTMLElement;
@@ -9,6 +9,6 @@ class Button{
     }
 
     protected handleClick(event: MouseEvent) : void {
-        alert(this.div.tagName);
+        
     }
 }

@@ -1,0 +1,3 @@
+interface ShootBehaviour {
+    shoot():void;
+}

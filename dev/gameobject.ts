@@ -68,8 +68,11 @@ class GameObject {
                 this.y + this.height > obj.y);
     }
 
-    public remove() {
-        // TODO remove the object
-        
+    public remove(go:GameObject, arr:Array<any>) {
+        go.div.remove();
+        let i:number = arr.indexOf(go);
+        if(i != -1) {
+            arr.splice(i, 1);
+        }
     }
 }

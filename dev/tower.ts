@@ -1,12 +1,14 @@
 /// <reference path="gameobject.ts" />
 
-class Tower extends GameObject {
+class Tower extends GameObject implements Observer {
 
+    private checkTowerLVL   : number = 0;
     private _bullets        : number = 16;
-    private bulletList      : Array<Bullet> = new Array();
+    private _bulletList     : Array<Bullet> = new Array();
     private bulletsDisplay  : HTMLElement;
-    private rotation        : number = 0;
     public  game            : Game;
+
+    private shootBehaviour : ShootBehaviour;
 
 	public get bullets(): number  {
 		return this._bullets;
@@ -17,13 +19,19 @@ class Tower extends GameObject {
         this.displayBullets();
 	}
 
-    constructor(x:number, y:number, g:Game) {
+    public get bulletList() {
+        return this._bulletList;
+    }
+
+    constructor(x:number, y:number, g:Game, s:Subject) {
         super(x, y, "tower");
+
+        s.subscribe(this);
 
         this.game = g;
         // Alle torens zien eruit als een singleshot-tower
         this.div.className = "";
-        this.div.classList.add("singleshot-tower");
+        this.div.classList.add("small-tower");
 
         // Om aantal kogels weer te geven
         this.bulletsDisplay = document.createElement("div");
@@ -31,51 +39,24 @@ class Tower extends GameObject {
         this.bulletsDisplay.style.fontSize = "14px";
 
         this.displayBullets();
-        
-        setInterval(() => this.fireSingle(), 900);
-        setInterval(() => this.fireMulti(), 1900);
+
+        this.shootBehaviour = new BasicTower(this);
+    }
+
+    public notify() {
+        if(this.checkTowerLVL <= 0) {
+            this.shootBehaviour = new GrayTower(this);
+            this.checkTowerLVL ++;
+        } else {
+            this.shootBehaviour = new RedTower(this);
+        }
     }
 
     public update() {
-        for(let bullet of this.bulletList) {
+        for(let bullet of this._bulletList) {
             bullet.update();
             bullet.draw();
         }
-    }
-
-    /**
-     * Fire a single bullet, then turn 45 degrees.
-     */
-    public fireSingle(): void {
-        if (this.bullets > 0) {
-            this.bulletList.push(new Bullet(
-                                 this.x + 48, 
-                                 this.y + 60, this.rotation,
-                                 "bullet-red"));
-            this.bullets--;
-            this.turn45Degrees();
-        }
-    }
-
-    /**
-     * Fire 8 bullets at a time
-     */
-    public fireMulti(): void {
-        while(this.rotation != 360 && this.bullets > 0) {
-            this.bulletList.push(new Bullet(
-                                 this.x + 40, 
-                                 this.y + 60, this.rotation,
-                                 "bullet-blue"));
-            this.bullets--;
-            this.rotation += 45;
-        }
-
-        this.rotation = 0;
-    }
-
-    private turn45Degrees() : void {
-        this.rotation += 45;
-        if (this.rotation == 360) this.rotation = 0;
     }
 
     private displayBullets() : void {

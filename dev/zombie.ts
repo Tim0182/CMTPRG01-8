@@ -20,9 +20,6 @@ class Zombie extends GameObject {
     public update(){
         this.x -= this.xspeed;
         this.y -= this.yspeed;
-        if (this.x + this.width < 0) {
-            this.remove();
-        }
 
         this.xdist = this.x - this.xtarget;
         this.ydist = this.y - this.ytarget;

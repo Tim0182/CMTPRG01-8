@@ -19,7 +19,7 @@ class Bullet extends GameObject{
         this.y += this.speedY;
 
         if (this.isOutsideWindow()) {
-            this.remove();
+            //this.remove();
         }
     }
 
