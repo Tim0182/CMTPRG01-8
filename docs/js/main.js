@@ -54,8 +54,6 @@ class Bullet extends GameObject {
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.isOutsideWindow()) {
-        }
     }
     isOutsideWindow() {
         return (this.x > window.innerWidth ||
@@ -92,7 +90,7 @@ class Game {
             this.gameOver();
         }
         this.zombiecounter++;
-        if (this.zombiecounter > 10) {
+        if (this.zombiecounter > 10000) {
             this.zombiecounter = 0;
             this.zombies.push(new Zombie());
         }
@@ -111,6 +109,12 @@ class Game {
                 if (zombie.x + zombie.width < 0) {
                     this.ui.decreaseLife(1);
                     zombie.remove(zombie, this.zombies);
+                }
+            }
+            for (let bulletBoundaries of this.bulletList) {
+                let outsideWindow = bulletBoundaries.isOutsideWindow();
+                if (outsideWindow) {
+                    bulletBoundaries.remove(bulletBoundaries, this.bulletList);
                 }
             }
             tower.update();

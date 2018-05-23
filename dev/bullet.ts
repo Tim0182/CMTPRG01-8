@@ -17,13 +17,9 @@ class Bullet extends GameObject{
     public update() : void {
         this.x += this.speedX;
         this.y += this.speedY;
-
-        if (this.isOutsideWindow()) {
-            //this.remove();
-        }
     }
 
-    private isOutsideWindow() : boolean {
+    public isOutsideWindow() : boolean {
         return(this.x > window.innerWidth ||
                this.x + this.width < 0 ||
                this.y > window.innerHeight ||
