@@ -1,6 +1,7 @@
 class UI {
     
     public  life        : number        = 100;
+    public  gold        : number        = 150;
 
     private coindiv     : HTMLElement;
     private lifediv     : HTMLElement;
@@ -10,15 +11,28 @@ class UI {
 
     constructor(game : Game) {
         this.coindiv = <HTMLElement> document.getElementsByTagName("counter")[0];
-        this.coindiv.innerHTML = "100";
+        this.coindiv.innerHTML = this.gold.toLocaleString();
 
         this.lifediv = <HTMLElement> document.querySelector("lifebar progressbar");
         this.lifediv.style.width = this.life + "%";
 
         this.lifediv.classList.add("blinking");
 
-        this.btnBullets  = new Button("bulletbutton");
+        this.btnBullets  = new BulletButton(game);
         this.btnUpgrade  = new TowerButton(game);
+    }
+
+    public checkGold(amount : number) : boolean {
+        if (this.gold >= amount) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public modifyGold(amount : number) : void {
+        this.gold += amount;
+        this.coindiv.innerHTML = this.gold.toLocaleString();
     }
 
     public decreaseLife(amount : number) : void {
