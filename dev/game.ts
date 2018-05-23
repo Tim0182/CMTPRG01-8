@@ -11,6 +11,10 @@ class Game {
 
     private tb = new TowerButton(this);
 
+    public get towerList() {
+        return this.towers;
+    }
+
     constructor() {
         this.ui = new UI(this);
             
@@ -45,6 +49,7 @@ class Game {
                     if (hasCollision) {
                         zombie.remove(bullet, this.bulletList);
                         bullet.remove(zombie, this.zombies);
+                        this.ui.modifyGold(zombie.getGoldReward);
                         let hasCollision = false;
                     }
                 }

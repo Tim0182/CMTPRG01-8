@@ -1,3 +1,5 @@
+/// <reference path="button.ts" />
+
 class TowerButton extends Button implements Subject {
     
     private progress:number = 0;
