@@ -6,7 +6,7 @@ Het koninkrijk Gazorpazorp wordt aangevallen door een eindeloze horde zombies. H
 Coming soon™
 
 <h2>Pull request</h2>
-Coming soon™
+https://github.com/Tim0182/CMTPRG01-9/commit/50abd7552c010072364220c08c8dcc401c939a21
 
 <h2>Peer review</h2>
 Coming soon™
