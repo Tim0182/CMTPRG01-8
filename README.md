@@ -6,7 +6,9 @@ Het koninkrijk Gazorpazorp wordt aangevallen door een eindeloze horde zombies. H
 Coming soon™
 
 <h2>Pull request</h2>
-Coming soon™
+Met deze pull request heb ik een extra "Shoot Behaviour" toegevoegd. Ik zag dat Arno bezig was met een LevelManager, voor elke level komen er meer meteorieten bij, maar er zijn geen beter upgrades om meer meteorieten kapot te schieten.
+
+https://github.com/Tim0182/CMTPRG01-9/commit/50abd7552c010072364220c08c8dcc401c939a21
 
 <h2>Peer review</h2>
 Coming soon™

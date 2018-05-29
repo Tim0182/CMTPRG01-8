@@ -10,6 +10,11 @@ class Zombie extends GameObject {
     private ydist:number;
     private xtarget:number;
     private ytarget:number;
+    private goldReward:number = 10;
+
+    public get getGoldReward() {
+        return this.goldReward;
+    }
         
     constructor() {
         super(window.innerWidth, Math.random() * window.innerHeight, "zombie");

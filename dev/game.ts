@@ -11,6 +11,10 @@ class Game {
 
     private tb = new TowerButton(this);
 
+    public get towerList() {
+        return this.towers;
+    }
+
     constructor() {
         this.ui = new UI(this);
             
@@ -32,7 +36,7 @@ class Game {
         }
         
         this.zombiecounter++;
-        if(this.zombiecounter > 10){
+        if(this.zombiecounter > 10000){
             this.zombiecounter = 0;
             this.zombies.push(new Zombie());
         }
@@ -45,12 +49,19 @@ class Game {
                     if (hasCollision) {
                         zombie.remove(bullet, this.bulletList);
                         bullet.remove(zombie, this.zombies);
+                        this.ui.modifyGold(zombie.getGoldReward);
                         let hasCollision = false;
                     }
                 }
                 if(zombie.x + zombie.width < 0) {
                     this.ui.decreaseLife(1);
                     zombie.remove(zombie, this.zombies);
+                }
+            }
+            for(let bulletBoundaries of this.bulletList) {
+                let outsideWindow = bulletBoundaries.isOutsideWindow();
+                if(outsideWindow) {
+                    bulletBoundaries.remove(bulletBoundaries, this.bulletList);
                 }
             }
             tower.update();

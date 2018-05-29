@@ -54,8 +54,6 @@ class Bullet extends GameObject {
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.isOutsideWindow()) {
-        }
     }
     isOutsideWindow() {
         return (this.x > window.innerWidth ||
@@ -81,6 +79,9 @@ class Game {
         this.towers.push(multiShotTower);
         requestAnimationFrame(() => this.gameLoop());
     }
+    get towerList() {
+        return this.towers;
+    }
     gameLoop() {
         if (this.pause) {
             return;
@@ -89,7 +90,7 @@ class Game {
             this.gameOver();
         }
         this.zombiecounter++;
-        if (this.zombiecounter > 10) {
+        if (this.zombiecounter > 10000) {
             this.zombiecounter = 0;
             this.zombies.push(new Zombie());
         }
@@ -101,12 +102,19 @@ class Game {
                     if (hasCollision) {
                         zombie.remove(bullet, this.bulletList);
                         bullet.remove(zombie, this.zombies);
+                        this.ui.modifyGold(zombie.getGoldReward);
                         let hasCollision = false;
                     }
                 }
                 if (zombie.x + zombie.width < 0) {
                     this.ui.decreaseLife(1);
                     zombie.remove(zombie, this.zombies);
+                }
+            }
+            for (let bulletBoundaries of this.bulletList) {
+                let outsideWindow = bulletBoundaries.isOutsideWindow();
+                if (outsideWindow) {
+                    bulletBoundaries.remove(bulletBoundaries, this.bulletList);
                 }
             }
             tower.update();
@@ -156,6 +164,10 @@ class Tower extends GameObject {
     get bulletList() {
         return this._bulletList;
     }
+    addBullets(amount) {
+        this._bullets += amount;
+        this.displayBullets();
+    }
     notify() {
         if (this.checkTowerLVL <= 0) {
             this.shootBehaviour = new GrayTower(this);
@@ -178,13 +190,26 @@ class Tower extends GameObject {
 class UI {
     constructor(game) {
         this.life = 100;
+        this.gold = 150;
         this.coindiv = document.getElementsByTagName("counter")[0];
-        this.coindiv.innerHTML = "100";
+        this.coindiv.innerHTML = this.gold.toLocaleString();
         this.lifediv = document.querySelector("lifebar progressbar");
         this.lifediv.style.width = this.life + "%";
         this.lifediv.classList.add("blinking");
-        this.btnBullets = new Button("bulletbutton");
+        this.btnBullets = new BulletButton(game);
         this.btnUpgrade = new TowerButton(game);
+    }
+    checkGold(amount) {
+        if (this.gold >= amount) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    modifyGold(amount) {
+        this.gold += amount;
+        this.coindiv.innerHTML = this.gold.toLocaleString();
     }
     decreaseLife(amount) {
         this.life -= amount;
@@ -195,7 +220,11 @@ class Zombie extends GameObject {
     constructor() {
         super(window.innerWidth, Math.random() * window.innerHeight, "zombie");
         this.speed = 2;
+        this.goldReward = 10;
         this.setTarget();
+    }
+    get getGoldReward() {
+        return this.goldReward;
     }
     update() {
         this.x -= this.xspeed;
@@ -266,6 +295,21 @@ class Button {
         this.div.addEventListener("click", (e) => this.handleClick(e));
     }
     handleClick(event) {
+    }
+}
+class BulletButton extends Button {
+    constructor(game) {
+        super('bulletbutton');
+        this._bulletPrice = 10;
+        this._game = game;
+    }
+    handleClick(event) {
+        if (this._game.ui.checkGold(this._bulletPrice)) {
+            this._game.ui.modifyGold(-this._bulletPrice);
+            for (let tower of this._game.towerList) {
+                tower.addBullets(1);
+            }
+        }
     }
 }
 class TowerButton extends Button {

@@ -43,6 +43,11 @@ class Tower extends GameObject implements Observer {
         this.shootBehaviour = new BasicTower(this);
     }
 
+    public addBullets(amount : number) {
+        this._bullets += amount;
+        this.displayBullets();
+    }
+
     public notify() {
         if(this.checkTowerLVL <= 0) {
             this.shootBehaviour = new GrayTower(this);
