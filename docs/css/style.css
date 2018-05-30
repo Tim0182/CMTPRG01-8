@@ -1,10 +1,8 @@
 html, body {
-    background-color: #70CF51;
+    background-color: #5a8a51;
     font-family: 'Press Start 2P', cursive;
     overflow:hidden;
     margin:0px; padding:0px;
-    background-image: url('../images/grass.png');
-    background-repeat: repeat;
     color:white;
     font-size:22px;
 }
@@ -16,6 +14,11 @@ body * {
     box-sizing: border-box;
     overflow:hidden;
     background-repeat: no-repeat;
+}
+.background {
+    /* background: url(../images/medievalTile_58.png) center center repeat; */
+    width: 100%;
+    height: 100%;
 }
 
 game, ui {
@@ -53,7 +56,7 @@ progressbar {
 }
 
 lifebar progressbar {
-    background-color:greenyellow;
+    background-color: #7cce00;
 }
 
 towerbutton progressbar {
@@ -89,9 +92,10 @@ towerbutton:hover, bulletbutton:hover, coinbutton:hover{
     box-shadow: 2px 2px 10px #000;
 }
 
-zombie {
-    width:24px; height:43px;
-    background-image: url('../images/zombie.png');
+unit {
+    width:43px; height:34px;
+    background-image: url('../images/tank.png');
+    background-size: cover;
 }
 
 coin{
@@ -108,7 +112,11 @@ counter{
 }
 
 gameover{
-    width: 100px;height: 50px;
+    width: 400px;height: 200px;text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%) !important;
 }
 
 .blinking {
@@ -118,23 +126,20 @@ gameover{
 /* towers */
 
 .small-tower {
-    width: 84px;
-    height: 113px;
-    background-image: url(../images/towersheet.png);
-    background-size: 270px;
-    background-position: 0px -125px;
+    width: 100px;
+    height: 153px;
+    background: url(../images/Towers-brown/tower_04.png) no-repeat 9px 15px, url(../images/Towers-brown/tower_20.png) no-repeat 6px 53px;
+    z-index: 1;
 }
 
 .singleshot-tower {
-    width: 84px;
-    height: 113px;
-    background-image: url(../images/towersheet.png);
-    background-size: 270px;
-    background-position: 0px -255px;
+    width: 100px;
+    height: 175px;
+    background: url(../images/Towers-brown/tower_24.png) no-repeat 9px 0px, url(../images/Towers-brown/tower_27.png) no-repeat 14px 57px, url(../images/Towers-brown/tower_09.png) no-repeat 10px 88px;
 }
 zombie {
 	width:67px; min-height:146px;
-	background-image: url('../images/chicken.png');
+	background-image: url('../images/zombie.png');
     cursor:pointer;
 }
 ui-coins {
@@ -143,29 +148,30 @@ ui-coins {
     background-color: white;
 }
 .multishot-tower {
-    width: 84px;
-    height: 113px;
-    background-image: url(../images/towersheet.png);
-    background-size: 270px;
-    background-position: 0px -380px;
+    width: 100px;
+    height: 175px;
+    background: url(../images/Towers-grey/tower_47.png) no-repeat 11px 24px, url(../images/Towers-grey/tower_23.png) no-repeat 11px 62px, url(../images/Towers-grey/tower_26.png) no-repeat 8px 92px;
 }
 .gold-tower {
-    width: 84px;
-    height: 113px;
-    background-image: url(../images/towersheet.png);
-    background-size: 270px;
-    background-position: -190px -380px;
+    width: 100px;
+    height: 175px;
+    background: url(../images/Towers-red/tower_24.png) no-repeat 1px 0px, url(../images/Towers-red/tower_37.png) no-repeat 6px 41px, url(../images/Towers-red/tower_28.png) no-repeat 6px 72px, url(../images/Towers-red/tower_54.png) no-repeat 6px 103px;
 }
 
 bullet-red {
-    width: 16px; height: 16px;
-    background-image: url('../images/bulletred.png');
+    width: 14px; height: 14px;
+    background-image: url('../images/tank_explosion10.png');
 }
 bullet-blue {
-    width: 16px; height: 16px;
-    background-image: url('../images/bulletblue.png');
+    width: 14px; height: 14px;
+    background-image: url('../images/tank_explosion5.png');
+    background-size: contain;
 }
-
+bullet-yellow {
+    width: 17px; height: 17px;
+    background-image: url('../images/tank_explosion7.png');
+    background-size: contain;
+}
 /* blink animatie */
 
 @keyframes blinking {

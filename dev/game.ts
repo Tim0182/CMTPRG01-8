@@ -5,6 +5,7 @@ class Game {
     public  GO              : GameOver;
     private pause           : boolean = false;
     private zombiecounter   : number = 0;
+    private resetGame          : number = 0;
     private towers          : Array<Tower> = new Array();
     private zombies         : Array<Zombie> = new Array();
     private bulletList      : Array<Bullet> = new Array();
@@ -20,10 +21,10 @@ class Game {
             
         let basicTower : Tower = new Tower(200, 200, this, this.tb);
         this.towers.push(basicTower);
-        let singleShotTower : Tower = new Tower(320, 60, this, this.tb);        
-        this.towers.push(singleShotTower);
-        let multiShotTower : Tower = new Tower(340, 180, this, this.tb);
-        this.towers.push(multiShotTower);
+        let basicTower1 : Tower = new Tower(320, 60, this, this.tb);        
+        this.towers.push(basicTower1);
+        let basicTower2 : Tower = new Tower(340, 180, this, this.tb);
+        this.towers.push(basicTower2);
 
         requestAnimationFrame(() => this.gameLoop());
     }
@@ -33,10 +34,15 @@ class Game {
 
         if(this.ui.life <= 0) {
             this.gameOver();
+            this.resetGame++;
+            if(this.resetGame > 300){
+                this.pause = true;
+                window.location.reload(true);
+            }
         }
         
         this.zombiecounter++;
-        if(this.zombiecounter > 10){
+        if(this.zombiecounter > 60){
             this.zombiecounter = 0;
             this.zombies.push(new Zombie());
         }
@@ -54,7 +60,7 @@ class Game {
                     }
                 }
                 if(zombie.x + zombie.width < 0) {
-                    this.ui.decreaseLife(1);
+                    this.ui.decreaseLife(50);
                     zombie.remove(zombie, this.zombies);
                 }
             }

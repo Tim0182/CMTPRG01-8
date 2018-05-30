@@ -3,7 +3,7 @@
 class Tower extends GameObject implements Observer {
 
     private checkTowerLVL   : number = 0;
-    private _bullets        : number = 16;
+    private _bullets        : number = 20;
     private _bulletList     : Array<Bullet> = new Array();
     private bulletsDisplay  : HTMLElement;
     public  game            : Game;
