@@ -23,6 +23,7 @@ Coming soon™
 <h2>Url naar game</h2>
 http://timvdh.nl/CMTPRG01-8/docs/
 
+
 TODO://
 • Een toelichting bij de beoordelingscriteria. De toelichting bevat
 geïsoleerde code snippets ter verheldering.

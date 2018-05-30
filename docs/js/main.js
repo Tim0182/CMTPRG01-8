@@ -66,6 +66,7 @@ class Game {
     constructor() {
         this.pause = false;
         this.zombiecounter = 0;
+        this.resetGame = 0;
         this.towers = new Array();
         this.zombies = new Array();
         this.bulletList = new Array();
@@ -73,10 +74,10 @@ class Game {
         this.ui = new UI(this);
         let basicTower = new Tower(200, 200, this, this.tb);
         this.towers.push(basicTower);
-        let singleShotTower = new Tower(320, 60, this, this.tb);
-        this.towers.push(singleShotTower);
-        let multiShotTower = new Tower(340, 180, this, this.tb);
-        this.towers.push(multiShotTower);
+        let basicTower1 = new Tower(320, 60, this, this.tb);
+        this.towers.push(basicTower1);
+        let basicTower2 = new Tower(340, 180, this, this.tb);
+        this.towers.push(basicTower2);
         requestAnimationFrame(() => this.gameLoop());
     }
     get towerList() {
@@ -88,9 +89,14 @@ class Game {
         }
         if (this.ui.life <= 0) {
             this.gameOver();
+            this.resetGame++;
+            if (this.resetGame > 300) {
+                this.pause = true;
+                window.location.reload(true);
+            }
         }
         this.zombiecounter++;
-        if (this.zombiecounter > 10) {
+        if (this.zombiecounter > 60) {
             this.zombiecounter = 0;
             this.zombies.push(new Zombie());
         }
@@ -107,7 +113,7 @@ class Game {
                     }
                 }
                 if (zombie.x + zombie.width < 0) {
-                    this.ui.decreaseLife(1);
+                    this.ui.decreaseLife(50);
                     zombie.remove(zombie, this.zombies);
                 }
             }
@@ -132,7 +138,7 @@ class Game {
 class GameOver extends GameObject {
     constructor() {
         super(window.innerWidth / 2 - 50, window.innerHeight / 2 - 25, "gameover");
-        this.div.innerHTML = "GAME OVER";
+        this.div.innerHTML = `GAME OVER<br><br> game restarts in 5 sec...`;
     }
 }
 window.addEventListener("load", function () {
@@ -142,7 +148,7 @@ class Tower extends GameObject {
     constructor(x, y, g, s) {
         super(x, y, "tower");
         this.checkTowerLVL = 0;
-        this._bullets = 16;
+        this._bullets = 20;
         this._bulletList = new Array();
         s.subscribe(this);
         this.game = g;
@@ -222,7 +228,7 @@ class UI {
 }
 class Zombie extends GameObject {
     constructor() {
-        super(window.innerWidth, Math.random() * window.innerHeight, "zombie");
+        super(window.innerWidth, Math.random() * window.innerHeight, "unit");
         this.speed = 2;
         this.goldReward = 10;
         this.setTarget();
@@ -266,8 +272,8 @@ class GoldTower {
         this.tower.div.classList.remove("multishot-tower");
     }
     shoot() {
-        while (this.rotation != 180 && this.tower.bullets > 0) {
-            this.tower.bulletList.push(new Bullet(this.tower.x + 40, this.tower.y + 60, this.rotation, "bullet-blue"));
+        while (this.rotation != 360 && this.tower.bullets > 0) {
+            this.tower.bulletList.push(new Bullet(this.tower.x + 40, this.tower.y + 60, this.rotation, "bullet-yellow"));
             this.tower.bullets--;
             this.rotation += 25;
         }
@@ -337,18 +343,22 @@ class TowerButton extends Button {
     constructor(game) {
         super("towerbutton");
         this.progress = 0;
+        this._towerPrice = 2.5;
         this.observers = new Array();
-        this.game = game;
+        this._game = game;
         this.bar = document.querySelector("towerbutton progressbar");
         this.bar.style.width = "0%";
     }
     handleClick(event) {
-        this.progress += 10;
-        this.bar.style.width = this.progress + "%";
-        if (this.progress > 90) {
-            this.progress = 0;
-            super.handleClick(event);
-            this.upgrade();
+        if (this._game.ui.checkGold(this._towerPrice)) {
+            this._game.ui.modifyGold(-this._towerPrice);
+            this.progress += 10;
+            this.bar.style.width = this.progress + "%";
+            if (this.progress > 90) {
+                this.progress = 0;
+                super.handleClick(event);
+                this.upgrade();
+            }
         }
     }
     subscribe(o) {

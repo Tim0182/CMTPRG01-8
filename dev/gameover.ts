@@ -2,7 +2,7 @@
 
 class GameOver extends GameObject{
     constructor() {
-        super(window.innerWidth / 2 - 50, window.innerHeight / 2 - 25, "gameover");
-        this.div.innerHTML = "GAME OVER";
+        super(window.innerWidth / 2 - 50, window.innerHeight / 2 - 25, "gameover");        
+        this.div.innerHTML = `GAME OVER<br><br> game restarts in 5 sec...`;
     }
 }

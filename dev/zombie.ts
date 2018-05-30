@@ -17,7 +17,7 @@ class Zombie extends GameObject {
     }
         
     constructor() {
-        super(window.innerWidth, Math.random() * window.innerHeight, "zombie");
+        super(window.innerWidth, Math.random() * window.innerHeight, "unit");
 
         this.setTarget();
     }

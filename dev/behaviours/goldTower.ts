@@ -10,12 +10,12 @@ class GoldTower implements ShootBehaviour {
     }
 
     public shoot(){
-        while(this.rotation != 180 && this.tower.bullets > 0) {
+        while(this.rotation != 360 && this.tower.bullets > 0) {
             this.tower.bulletList.push(
                 new Bullet(
                     this.tower.x + 40, 
                     this.tower.y + 60, this.rotation,
-                    "bullet-blue")
+                    "bullet-yellow")
                 );
             this.tower.bullets--;
             this.rotation += 25;
