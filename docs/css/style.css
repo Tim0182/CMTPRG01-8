@@ -118,17 +118,23 @@ gameover{
 /* towers */
 
 .small-tower {
-    width: 93px; height: 113px;
-    background-image: url('../images/smalltower.png');
+    width: 84px;
+    height: 113px;
+    background-image: url(../images/towersheet.png);
+    background-size: 270px;
+    background-position: 0px -125px;
 }
 
 .singleshot-tower {
-    width: 95px; height: 186px;
-    background-image: url('../images/singleshottower.png');
+    width: 84px;
+    height: 113px;
+    background-image: url(../images/towersheet.png);
+    background-size: 270px;
+    background-position: 0px -255px;
 }
 zombie {
 	width:67px; min-height:146px;
-	background-image: url('../images/zombie.png');
+	background-image: url('../images/chicken.png');
     cursor:pointer;
 }
 ui-coins {
@@ -137,8 +143,18 @@ ui-coins {
     background-color: white;
 }
 .multishot-tower {
-    width: 93px; height: 208px;
-    background-image: url('../images/multishottower.png');
+    width: 84px;
+    height: 113px;
+    background-image: url(../images/towersheet.png);
+    background-size: 270px;
+    background-position: 0px -380px;
+}
+.gold-tower {
+    width: 84px;
+    height: 113px;
+    background-image: url(../images/towersheet.png);
+    background-size: 270px;
+    background-position: -190px -380px;
 }
 
 bullet-red {

@@ -75,7 +75,7 @@ class Game {
         this.towers.push(basicTower);
         let singleShotTower = new Tower(320, 60, this, this.tb);
         this.towers.push(singleShotTower);
-        let multiShotTower = new Tower(600, 240, this, this.tb);
+        let multiShotTower = new Tower(340, 180, this, this.tb);
         this.towers.push(multiShotTower);
         requestAnimationFrame(() => this.gameLoop());
     }
@@ -90,7 +90,7 @@ class Game {
             this.gameOver();
         }
         this.zombiecounter++;
-        if (this.zombiecounter > 10000) {
+        if (this.zombiecounter > 10) {
             this.zombiecounter = 0;
             this.zombies.push(new Zombie());
         }
@@ -173,8 +173,12 @@ class Tower extends GameObject {
             this.shootBehaviour = new GrayTower(this);
             this.checkTowerLVL++;
         }
-        else {
+        else if (this.checkTowerLVL == 1) {
             this.shootBehaviour = new RedTower(this);
+            this.checkTowerLVL++;
+        }
+        else if (this.checkTowerLVL == 2) {
+            this.shootBehaviour = new GoldTower(this);
         }
     }
     update() {
@@ -251,6 +255,23 @@ class BasicTower {
         this.tower = t;
     }
     shoot() {
+    }
+}
+class GoldTower {
+    constructor(t) {
+        this.rotation = 0;
+        this.tower = t;
+        setInterval(() => this.shoot(), 1900);
+        this.tower.div.classList.add("gold-tower");
+        this.tower.div.classList.remove("multishot-tower");
+    }
+    shoot() {
+        while (this.rotation != 180 && this.tower.bullets > 0) {
+            this.tower.bulletList.push(new Bullet(this.tower.x + 40, this.tower.y + 60, this.rotation, "bullet-blue"));
+            this.tower.bullets--;
+            this.rotation += 25;
+        }
+        this.rotation = 0;
     }
 }
 class GrayTower {
