@@ -15,13 +15,15 @@ Coming soon™
 
 <h2>Authors</h2>
 Tim van der Hoek - development<br>
-HRO - graphics
+HRO & Pinterest - graphics
 
 <h2>Een klassendiagram.</h2>
 Coming soon™
+
+<h2>Url naar game</h2>
+http://timvdh.nl/CMTPRG01-8/docs/
 
 TODO://
 • Een toelichting bij de beoordelingscriteria. De toelichting bevat
 geïsoleerde code snippets ter verheldering.
 • Een toelichting van de gebruikte gameplay componenten.
-• Een link naar de online speelbare versie van de game (bv. Github Pages)
