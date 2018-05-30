@@ -22,7 +22,7 @@ class Game {
         this.towers.push(basicTower);
         let singleShotTower : Tower = new Tower(320, 60, this, this.tb);        
         this.towers.push(singleShotTower);
-        let multiShotTower : Tower = new Tower(600, 240, this, this.tb);
+        let multiShotTower : Tower = new Tower(340, 180, this, this.tb);
         this.towers.push(multiShotTower);
 
         requestAnimationFrame(() => this.gameLoop());
@@ -36,7 +36,7 @@ class Game {
         }
         
         this.zombiecounter++;
-        if(this.zombiecounter > 10000){
+        if(this.zombiecounter > 10){
             this.zombiecounter = 0;
             this.zombies.push(new Zombie());
         }

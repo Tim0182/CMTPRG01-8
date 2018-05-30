@@ -52,8 +52,11 @@ class Tower extends GameObject implements Observer {
         if(this.checkTowerLVL <= 0) {
             this.shootBehaviour = new GrayTower(this);
             this.checkTowerLVL ++;
-        } else {
+        } else if(this.checkTowerLVL == 1) {
             this.shootBehaviour = new RedTower(this);
+            this.checkTowerLVL ++;
+        } else if(this.checkTowerLVL == 2) {
+            this.shootBehaviour = new GoldTower(this);
         }
     }
 
