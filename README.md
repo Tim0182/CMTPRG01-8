@@ -11,7 +11,7 @@ Met deze pull request heb ik een extra "Shoot Behaviour" toegevoegd. Ik zag dat 
 https://github.com/Tim0182/CMTPRG01-9/commit/50abd7552c010072364220c08c8dcc401c939a21
 
 <h2>Peer review</h2>
-Coming soon™
+https://github.com/ArnovanDoesburg/Asteroid-Assault/issues/1
 
 <h2>Authors</h2>
 Tim van der Hoek - development<br>
@@ -25,6 +25,7 @@ http://timvdh.nl/CMTPRG01-8/docs/
 
 
 TODO://
-• Een toelichting bij de beoordelingscriteria. De toelichting bevat
-geïsoleerde code snippets ter verheldering.
+
+• Een toelichting bij de beoordelingscriteria. De toelichting bevat geïsoleerde code snippets ter verheldering.
+
 • Een toelichting van de gebruikte gameplay componenten.
