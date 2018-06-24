@@ -1,3 +1,62 @@
+class BasicTower {
+    constructor(t) {
+        this.tower = t;
+    }
+    shoot() {
+    }
+}
+class GoldTower {
+    constructor(t) {
+        this.rotation = 0;
+        this.tower = t;
+        setInterval(() => this.shoot(), 1900);
+        this.tower.div.classList.add("gold-tower");
+        this.tower.div.classList.remove("multishot-tower");
+    }
+    shoot() {
+        while (this.rotation != 360 && this.tower.bullets > 0) {
+            this.tower.bulletList.push(new Bullet(this.tower.x + 40, this.tower.y + 60, this.rotation, "bullet-yellow"));
+            this.tower.bullets--;
+            this.rotation += 25;
+        }
+        this.rotation = 0;
+    }
+}
+class GrayTower {
+    constructor(t) {
+        this.rotation = 0;
+        this.tower = t;
+        setInterval(() => this.shoot(), 900);
+        this.tower.div.classList.add("singleshot-tower");
+        this.tower.div.classList.remove("small-tower");
+    }
+    shoot() {
+        if (this.tower.bullets > 0) {
+            this.tower.bulletList.push(new Bullet(this.tower.x + 48, this.tower.y + 60, this.rotation, "bullet-red"));
+            this.tower.bullets--;
+            this.rotation += 45;
+            if (this.rotation == 360)
+                this.rotation = 0;
+        }
+    }
+}
+class RedTower {
+    constructor(t) {
+        this.rotation = 0;
+        this.tower = t;
+        setInterval(() => this.shoot(), 1900);
+        this.tower.div.classList.add("multishot-tower");
+        this.tower.div.classList.remove("singleshot-tower");
+    }
+    shoot() {
+        while (this.rotation != 360 && this.tower.bullets > 0) {
+            this.tower.bulletList.push(new Bullet(this.tower.x + 40, this.tower.y + 60, this.rotation, "bullet-blue"));
+            this.tower.bullets--;
+            this.rotation += 45;
+        }
+        this.rotation = 0;
+    }
+}
 class GameObject {
     constructor(x, y, tag) {
         this._x = 0;
@@ -62,11 +121,67 @@ class Bullet extends GameObject {
             this.y + this.height < 0);
     }
 }
+class Button {
+    constructor(tag) {
+        this.pause = false;
+        this.div = document.getElementsByTagName(tag)[0];
+        this.div.addEventListener("click", (e) => this.handleClick(e));
+    }
+    handleClick(event) {
+    }
+}
+class BulletButton extends Button {
+    constructor(game) {
+        super('bulletbutton');
+        this._bulletPrice = 10;
+        this._game = game;
+    }
+    handleClick(event) {
+        if (this._game.ui.checkGold(this._bulletPrice)) {
+            this._game.ui.modifyGold(-this._bulletPrice);
+            for (let tower of this._game.towerList) {
+                tower.addBullets(1);
+            }
+        }
+    }
+}
+class TowerButton extends Button {
+    constructor(game) {
+        super("towerbutton");
+        this.progress = 0;
+        this._towerPrice = 2.5;
+        this.observers = new Array();
+        this._game = game;
+        this.bar = document.querySelector("towerbutton progressbar");
+        this.bar.style.width = "0%";
+    }
+    handleClick(event) {
+        if (this._game.ui.checkGold(this._towerPrice)) {
+            this._game.ui.modifyGold(-this._towerPrice);
+            this.progress += 10;
+            this.bar.style.width = this.progress + "%";
+            if (this.progress > 90) {
+                this.progress = 0;
+                super.handleClick(event);
+                this.upgrade();
+            }
+        }
+    }
+    subscribe(o) {
+        this.observers.push(o);
+    }
+    unsubscribe(o) {
+    }
+    upgrade() {
+        for (let o of this.observers) {
+            o.notify();
+        }
+    }
+}
 class Game {
     constructor() {
         this.pause = false;
         this.zombiecounter = 0;
-        this.resetGame = 0;
         this.towers = new Array();
         this.zombies = new Array();
         this.bulletList = new Array();
@@ -88,15 +203,10 @@ class Game {
             return;
         }
         if (this.ui.life <= 0) {
-            this.gameOver();
-            this.resetGame++;
-            if (this.resetGame > 300) {
-                this.pause = true;
-                window.location.reload(true);
-            }
+            GameOver.getInstance().resetLevel();
         }
         this.zombiecounter++;
-        if (this.zombiecounter > 60) {
+        if (this.zombiecounter > 20) {
             this.zombiecounter = 0;
             this.zombies.push(new Zombie());
         }
@@ -113,7 +223,7 @@ class Game {
                     }
                 }
                 if (zombie.x + zombie.width < 0) {
-                    this.ui.decreaseLife(50);
+                    this.ui.decreaseLife(5);
                     zombie.remove(zombie, this.zombies);
                 }
             }
@@ -131,14 +241,24 @@ class Game {
         }
         requestAnimationFrame(() => this.gameLoop());
     }
-    gameOver() {
-        this.GO = new GameOver();
-    }
 }
 class GameOver extends GameObject {
     constructor() {
         super(window.innerWidth / 2 - 50, window.innerHeight / 2 - 25, "gameover");
+        this.resetGame = 0;
         this.div.innerHTML = `GAME OVER<br><br> game restarts in 5 sec...`;
+    }
+    static getInstance() {
+        if (!GameOver._instance) {
+            GameOver._instance = new GameOver();
+        }
+        return GameOver._instance;
+    }
+    resetLevel() {
+        this.resetGame++;
+        if (this.resetGame > 300) {
+            window.location.reload(true);
+        }
     }
 }
 window.addEventListener("load", function () {
@@ -200,7 +320,7 @@ class Tower extends GameObject {
 class UI {
     constructor(game) {
         this.life = 100;
-        this.gold = 150;
+        this.gold = 200;
         this.coindiv = document.getElementsByTagName("counter")[0];
         this.coindiv.innerHTML = this.gold.toLocaleString();
         this.lifediv = document.querySelector("lifebar progressbar");
@@ -254,122 +374,6 @@ class Zombie extends GameObject {
         let distance = Math.sqrt(xdist * xdist + ydist * ydist);
         this.xspeed = (xdist / distance) * this.speed;
         this.yspeed = (ydist / distance) * this.speed;
-    }
-}
-class BasicTower {
-    constructor(t) {
-        this.tower = t;
-    }
-    shoot() {
-    }
-}
-class GoldTower {
-    constructor(t) {
-        this.rotation = 0;
-        this.tower = t;
-        setInterval(() => this.shoot(), 1900);
-        this.tower.div.classList.add("gold-tower");
-        this.tower.div.classList.remove("multishot-tower");
-    }
-    shoot() {
-        while (this.rotation != 360 && this.tower.bullets > 0) {
-            this.tower.bulletList.push(new Bullet(this.tower.x + 40, this.tower.y + 60, this.rotation, "bullet-yellow"));
-            this.tower.bullets--;
-            this.rotation += 25;
-        }
-        this.rotation = 0;
-    }
-}
-class GrayTower {
-    constructor(t) {
-        this.rotation = 0;
-        this.tower = t;
-        setInterval(() => this.shoot(), 900);
-        this.tower.div.classList.add("singleshot-tower");
-        this.tower.div.classList.remove("small-tower");
-    }
-    shoot() {
-        if (this.tower.bullets > 0) {
-            this.tower.bulletList.push(new Bullet(this.tower.x + 48, this.tower.y + 60, this.rotation, "bullet-red"));
-            this.tower.bullets--;
-            this.rotation += 45;
-            if (this.rotation == 360)
-                this.rotation = 0;
-        }
-    }
-}
-class RedTower {
-    constructor(t) {
-        this.rotation = 0;
-        this.tower = t;
-        setInterval(() => this.shoot(), 1900);
-        this.tower.div.classList.add("multishot-tower");
-        this.tower.div.classList.remove("singleshot-tower");
-    }
-    shoot() {
-        while (this.rotation != 360 && this.tower.bullets > 0) {
-            this.tower.bulletList.push(new Bullet(this.tower.x + 40, this.tower.y + 60, this.rotation, "bullet-blue"));
-            this.tower.bullets--;
-            this.rotation += 45;
-        }
-        this.rotation = 0;
-    }
-}
-class Button {
-    constructor(tag) {
-        this.pause = false;
-        this.div = document.getElementsByTagName(tag)[0];
-        this.div.addEventListener("click", (e) => this.handleClick(e));
-    }
-    handleClick(event) {
-    }
-}
-class BulletButton extends Button {
-    constructor(game) {
-        super('bulletbutton');
-        this._bulletPrice = 10;
-        this._game = game;
-    }
-    handleClick(event) {
-        if (this._game.ui.checkGold(this._bulletPrice)) {
-            this._game.ui.modifyGold(-this._bulletPrice);
-            for (let tower of this._game.towerList) {
-                tower.addBullets(1);
-            }
-        }
-    }
-}
-class TowerButton extends Button {
-    constructor(game) {
-        super("towerbutton");
-        this.progress = 0;
-        this._towerPrice = 2.5;
-        this.observers = new Array();
-        this._game = game;
-        this.bar = document.querySelector("towerbutton progressbar");
-        this.bar.style.width = "0%";
-    }
-    handleClick(event) {
-        if (this._game.ui.checkGold(this._towerPrice)) {
-            this._game.ui.modifyGold(-this._towerPrice);
-            this.progress += 10;
-            this.bar.style.width = this.progress + "%";
-            if (this.progress > 90) {
-                this.progress = 0;
-                super.handleClick(event);
-                this.upgrade();
-            }
-        }
-    }
-    subscribe(o) {
-        this.observers.push(o);
-    }
-    unsubscribe(o) {
-    }
-    upgrade() {
-        for (let o of this.observers) {
-            o.notify();
-        }
     }
 }
 //# sourceMappingURL=main.js.map

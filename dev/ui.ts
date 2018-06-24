@@ -1,7 +1,7 @@
 class UI {
     
     public  life        : number        = 100;
-    public  gold        : number        = 150;
+    public  gold        : number        = 200;
 
     private coindiv     : HTMLElement;
     private lifediv     : HTMLElement;

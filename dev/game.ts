@@ -35,7 +35,7 @@ class Game {
         }
         
         this.zombiecounter++;
-        if(this.zombiecounter > 60){
+        if(this.zombiecounter > 20){
             this.zombiecounter = 0;
             this.zombies.push(new Zombie());
         }
@@ -53,7 +53,7 @@ class Game {
                     }
                 }
                 if(zombie.x + zombie.width < 0) {
-                    this.ui.decreaseLife(50);
+                    this.ui.decreaseLife(5);
                     zombie.remove(zombie, this.zombies);
                 }
             }
