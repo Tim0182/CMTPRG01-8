@@ -2,10 +2,8 @@ class Game {
 
     // Fields
     public  ui              : UI;
-    public  GO              : GameOver;
     private pause           : boolean = false;
     private zombiecounter   : number = 0;
-    private resetGame          : number = 0;
     private towers          : Array<Tower> = new Array();
     private zombies         : Array<Zombie> = new Array();
     private bulletList      : Array<Bullet> = new Array();
@@ -33,12 +31,7 @@ class Game {
         if(this.pause) { return; } 
 
         if(this.ui.life <= 0) {
-            this.gameOver();
-            this.resetGame++;
-            if(this.resetGame > 300){
-                this.pause = true;
-                window.location.reload(true);
-            }
+            GameOver.getInstance().resetLevel();
         }
         
         this.zombiecounter++;
@@ -79,10 +72,5 @@ class Game {
         }
 
         requestAnimationFrame(() => this.gameLoop());
-    }
-
-    private gameOver() : void {
-        // TODO handle game over
-        this.GO = new GameOver();
     }
 }
