@@ -29,7 +29,7 @@ Iedere toren(observer) luistert naar wanneer de upgrade knop(subject) voldoende 
 De classes tower.ts, bullet.ts, zombie.ts en gameover.ts extenden allemaal van gameobject.ts wat ze allemaal een GameObject maakt. bulletbutton.ts en towerbutton.ts zijn beide van het type button.ts.
 
 <h2>Een klassendiagram.</h2>
-Coming soon™
+https://puu.sh/ALoic/cc43f75451.png
 
 <h2>Url naar game</h2>
 http://timvdh.nl/CMTPRG01-8/docs/
