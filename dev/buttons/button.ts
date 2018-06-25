@@ -1,6 +1,5 @@
 class Button {
 
-    private pause : boolean = false;
     protected div : HTMLElement;
 
     constructor(tag:string) {
