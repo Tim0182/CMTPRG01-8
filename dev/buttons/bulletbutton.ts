@@ -15,8 +15,9 @@ class BulletButton extends Button {
         if (this._game.ui.checkGold(this._bulletPrice)) {
             this._game.ui.modifyGold(-this._bulletPrice);
 
-            for (let tower of this._game.towerList) {
-                tower.addBullets(1);
+            for (let obj of this._game._gameObjects) {
+                if(obj instanceof Tower) 
+                    obj.addBullets(1);
             }
         }
     }

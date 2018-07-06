@@ -93,9 +93,9 @@ class GameObject {
             this.y < obj.y + obj.height &&
             this.y + this.height > obj.y);
     }
-    remove(go, arr) {
-        go.div.remove();
-        let i = arr.indexOf(go);
+    remove(arr) {
+        this.div.remove();
+        let i = arr.indexOf(this);
         if (i != -1) {
             arr.splice(i, 1);
         }
@@ -123,7 +123,6 @@ class Bullet extends GameObject {
 }
 class Button {
     constructor(tag) {
-        this.pause = false;
         this.div = document.getElementsByTagName(tag)[0];
         this.div.addEventListener("click", (e) => this.handleClick(e));
     }
@@ -139,8 +138,9 @@ class BulletButton extends Button {
     handleClick(event) {
         if (this._game.ui.checkGold(this._bulletPrice)) {
             this._game.ui.modifyGold(-this._bulletPrice);
-            for (let tower of this._game.towerList) {
-                tower.addBullets(1);
+            for (let obj of this._game._gameObjects) {
+                if (obj instanceof Tower)
+                    obj.addBullets(1);
             }
         }
     }
@@ -182,21 +182,16 @@ class Game {
     constructor() {
         this.pause = false;
         this.zombiecounter = 0;
-        this.towers = new Array();
-        this.zombies = new Array();
-        this.bulletList = new Array();
+        this._gameObjects = new Array();
         this.tb = new TowerButton(this);
         this.ui = new UI(this);
         let basicTower = new Tower(200, 200, this, this.tb);
-        this.towers.push(basicTower);
+        this._gameObjects.push(basicTower);
         let basicTower1 = new Tower(320, 60, this, this.tb);
-        this.towers.push(basicTower1);
+        this._gameObjects.push(basicTower1);
         let basicTower2 = new Tower(340, 180, this, this.tb);
-        this.towers.push(basicTower2);
+        this._gameObjects.push(basicTower2);
         requestAnimationFrame(() => this.gameLoop());
-    }
-    get towerList() {
-        return this.towers;
     }
     gameLoop() {
         if (this.pause) {
@@ -208,36 +203,36 @@ class Game {
         this.zombiecounter++;
         if (this.zombiecounter > 20) {
             this.zombiecounter = 0;
-            this.zombies.push(new Zombie());
+            this._gameObjects.push(new Zombie());
         }
-        for (let tower of this.towers) {
-            this.bulletList = tower.bulletList;
-            for (let zombie of this.zombies) {
-                for (let bullet of this.bulletList) {
-                    let hasCollision = bullet.hasCollision(zombie);
-                    if (hasCollision) {
-                        zombie.remove(bullet, this.bulletList);
-                        bullet.remove(zombie, this.zombies);
-                        this.ui.modifyGold(zombie.getGoldReward);
-                        let hasCollision = false;
+        for (let gameObject of this._gameObjects) {
+            if (gameObject instanceof Zombie) {
+                if (gameObject.x + gameObject.width < 0) {
+                    this.ui.decreaseLife(5);
+                    gameObject.remove(this._gameObjects);
+                }
+            }
+            if (gameObject instanceof Tower) {
+                for (let bullet of gameObject.bulletList) {
+                    for (let otherObject of this._gameObjects) {
+                        if (otherObject instanceof Zombie) {
+                            console.log("This is a zombie.");
+                            if (bullet.hasCollision(otherObject)) {
+                                console.log('has collision.');
+                                this.ui.modifyGold(otherObject.getGoldReward);
+                                otherObject.remove(this._gameObjects);
+                                bullet.remove(this._gameObjects);
+                            }
+                        }
+                    }
+                    let outsideWindow = bullet.isOutsideWindow();
+                    if (outsideWindow) {
+                        bullet.remove(this._gameObjects);
                     }
                 }
-                if (zombie.x + zombie.width < 0) {
-                    this.ui.decreaseLife(5);
-                    zombie.remove(zombie, this.zombies);
-                }
             }
-            for (let bulletBoundaries of this.bulletList) {
-                let outsideWindow = bulletBoundaries.isOutsideWindow();
-                if (outsideWindow) {
-                    bulletBoundaries.remove(bulletBoundaries, this.bulletList);
-                }
-            }
-            tower.update();
-        }
-        for (let zombie of this.zombies) {
-            zombie.update();
-            zombie.draw();
+            gameObject.update();
+            gameObject.draw();
         }
         requestAnimationFrame(() => this.gameLoop());
     }
