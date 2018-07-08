@@ -3,10 +3,7 @@ class Game {
     // Fields
     public  ui              : UI;
     private pause           : boolean = false;
-    private zombiecounter   : number = 0;
-    // private towers          : Array<Tower> = new Array();
-    // private zombies         : Array<Zombie> = new Array();
-    // private bulletList      : Array<Bullet> = new Array(); 
+    private zombiecounter   : number = 0; 
     public _gameObjects : Array<GameObject> = new Array();
 
     private tb = new TowerButton(this);
@@ -73,36 +70,6 @@ class Game {
             gameObject.update();    
             gameObject.draw();            
         }
-        // for(let tower of this.towers) {
-        //     this.bulletList = tower.bulletList;
-        //     for(let zombie of this.zombies){
-        //         for(let bullet of this.bulletList) {
-        //             let hasCollision = bullet.hasCollision(zombie);
-        //             if (hasCollision) {
-        //                 zombie.remove(bullet, this.bulletList);
-        //                 bullet.remove(zombie, this.zombies);
-        //                 this.ui.modifyGold(zombie.getGoldReward);
-        //                 let hasCollision = false;
-        //             }
-        //         }
-        //         if(zombie.x + zombie.width < 0) {
-        //             this.ui.decreaseLife(5);
-        //             zombie.remove(zombie, this.zombies);
-        //         }
-        //     }
-        //     for(let bulletBoundaries of this.bulletList) {
-        //         let outsideWindow = bulletBoundaries.isOutsideWindow();
-        //         if(  ) {
-        //             bulletBoundaries.remove(bulletBoundaries, this.bulletList);
-        //         }
-        //     }
-        //     tower.update();
-
-        // }
-        // for(let zombie of this.zombies) {
-        //     zombie.update();
-        //     zombie.draw();
-        // }
 
         requestAnimationFrame(() => this.gameLoop());
     }

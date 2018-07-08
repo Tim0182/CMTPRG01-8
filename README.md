@@ -26,7 +26,7 @@ Het Strategy pattern is toegepast in de vorm van shootingbehaviours voor de vers
 Iedere toren(observer) luistert naar wanneer de upgrade knop(subject) voldoende keren is aangeklikt om torens te laten upgraden. Daarbij heeft iedere toren een notify functie waarin gekeken word welk level de toren is en welke nieuwe shootingbehaviour er moet worden gecreëerd.
 
 <h3>Polymorphisme</h3>
-De classes tower.ts, bullet.ts, zombie.ts en gameover.ts extenden allemaal van gameobject.ts wat ze allemaal een GameObject maakt. bulletbutton.ts en towerbutton.ts zijn beide van het type button.ts.
+Door elk game-gerelateerd object in een GameObject te maken, was het gemakkelijk om door alle verschillende soorten GameObjects te lopen en te controleren op collision enz. Door "instanceof" te gebruiken was het mogelijk om een bullet van een tank te onderscheiden terwijl ze van hetzelfde type zijn GameObject. Zodra er op de bulletButton geklikt wordt, wordt er een kogel toegevoegd aan de lijst met gameobjects.
 
 <h2>Een klassendiagram.</h2>
 https://puu.sh/ALoic/cc43f75451.png
